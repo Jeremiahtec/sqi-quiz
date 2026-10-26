@@ -17,14 +17,10 @@ import { playFanfare } from '../../utils/soundEffects';
 
 export default function PostGame({ finalData, onDone, socket }) {
   const [activeTab, setActiveTab] = useState('podium');
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const leaderboard    = finalData?.leaderboard    || [];
   const questionStats  = finalData?.questionStats  || [];
-
-  // Play victory fanfare on mount
-  useEffect(() => {
-    playFanfare();
-  }, []);
 
   // CSV Report Generator
   const handleExportCSV = () => {
@@ -76,8 +72,8 @@ export default function PostGame({ finalData, onDone, socket }) {
       {/* Floating reactions */}
       <FloatingReactions socket={socket} />
 
-      {/* Confetti (always visible on podium tab) */}
-      {activeTab === 'podium' && <ConfettiCanvas />}
+      {/* Confetti (triggers when champion is unveiled) */}
+      {activeTab === 'podium' && showConfetti && <ConfettiCanvas />}
 
       {/* ── Header ──────────────────────────────────────── */}
       <header style={{
@@ -199,7 +195,10 @@ export default function PostGame({ finalData, onDone, socket }) {
                 }}>
                   Top Performers
                 </p>
-                <Podium leaderboard={leaderboard} />
+                <Podium
+                  leaderboard={leaderboard}
+                  onChampionRevealed={() => setShowConfetti(true)}
+                />
               </div>
             )}
 

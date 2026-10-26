@@ -129,10 +129,13 @@ io.on('connection', (socket) => {
   // ──────────────────────────────────────────────────────────
   // PLAYER: Live emoji reaction
   // ──────────────────────────────────────────────────────────
-  socket.on('player:reaction', ({ pin, emoji }) => {
-    if (!pin || !emoji) return;
-    io.to(pin).emit('game:reaction', {
+  socket.on('player:reaction', ({ pin, emoji, nickname }) => {
+    const rawPin = pin || socket.data?.pin;
+    if (!rawPin || !emoji) return;
+    const sender = String(nickname || socket.data?.nickname || '').trim();
+    io.to(String(rawPin)).emit('game:reaction', {
       emoji,
+      nickname: sender,
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
     });
   });
@@ -160,37 +163,37 @@ io.on('connection', (socket) => {
   });
 
   // ──────────────────────────────────────────────────────────
-  // HOST: Start the game → auto-sends Q1
+  // HOST: Start the game → 5s countdown → sends Q1
   // ──────────────────────────────────────────────────────────
   socket.on('host:start-game', ({ pin }) => {
     const room = getRoom(pin);
     if (!room || room.hostSocketId !== socket.id) return;
 
-    room.phase = 'question';
-    room.currentQuestionIndex = 0;
-    room.answerBuffer = new Map();
-    room.questionStartTime = Date.now();
+    room.phase = 'countdown';
 
-    const question = room.quiz.questions[0];
-    const optionCount = _getOptionCount(question);
-
-    // Broadcast "started" + first question to players (excluding host)
-    socket.to(pin).emit('game:started', {});
-    socket.to(pin).emit('game:question', {
-      index: 0,
-      type: question.type,
-      timeLimit: question.timeLimit,
-      optionCount,
+    // Broadcast countdown start to everyone in room
+    io.to(pin).emit('game:starting', {
+      duration: 5,
+      totalQuestions: room.quiz.questions?.length || 1,
     });
 
-    // Send full question to host only
-    socket.emit('game:question-host', _buildHostQuestion(question, 0));
+    console.log(`[host] 5s countdown started in room ${pin}`);
 
-    // Send initial 0-answer count with active connected total
-    const activeTotal = _getActiveConnectedPlayers(room).length;
-    socket.emit('host:answer-count', { count: 0, total: activeTotal });
+    let remaining = 5;
+    const interval = setInterval(() => {
+      remaining--;
+      if (!getRoom(pin) || room.phase !== 'countdown') {
+        clearInterval(interval);
+        return;
+      }
 
-    console.log(`[host] Game started in ${pin}, Q0 sent (${activeTotal} active players)`);
+      if (remaining > 0) {
+        io.to(pin).emit('game:countdown-tick', { count: remaining });
+      } else {
+        clearInterval(interval);
+        _launchQuestionZero(pin, room);
+      }
+    }, 1000);
   });
 
   // ──────────────────────────────────────────────────────────
@@ -422,6 +425,34 @@ function _checkAndTriggerReveal(pin, room) {
     console.log(`[room ${pin}] All active players (${answeredCount}/${totalActive}) have answered! Cutting timer and revealing now.`);
     _executeReveal(pin, room);
   }
+}
+
+function _launchQuestionZero(pin, room) {
+  if (!room) return;
+  room.phase = 'question';
+  room.currentQuestionIndex = 0;
+  room.answerBuffer = new Map();
+  room.questionStartTime = Date.now();
+
+  const question = room.quiz.questions[0];
+  const optionCount = _getOptionCount(question);
+
+  // Broadcast "started" + first question to players
+  io.to(pin).emit('game:started', {});
+  io.to(pin).emit('game:question', {
+    index: 0,
+    type: question.type,
+    timeLimit: question.timeLimit,
+    optionCount,
+  });
+
+  // Send full question to host
+  io.to(room.hostSocketId).emit('game:question-host', _buildHostQuestion(question, 0));
+
+  const activeTotal = _getActiveConnectedPlayers(room).length;
+  io.to(room.hostSocketId).emit('host:answer-count', { count: 0, total: activeTotal });
+
+  console.log(`[room ${pin}] Q0 live after 5s countdown (${activeTotal} active players)`);
 }
 
 function _executeReveal(pin, room) {

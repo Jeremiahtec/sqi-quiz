@@ -14,6 +14,7 @@ import Lobby from './views/host/Lobby';
 import Projector from './views/host/Projector';
 import Standings from './views/host/Standings';
 import PostGame from './views/host/PostGame';
+import StartCountdown from './components/StartCountdown';
 
 // Player views
 import Join from './views/player/Join';
@@ -74,6 +75,10 @@ function HostApp() {
         if (typeof total === 'number') {
           setActivePlayerCount(total);
         }
+      });
+
+      socket.on('game:starting', () => {
+        setView('countdown');
       });
 
       socket.on('game:question-host', (qData) => {
@@ -167,6 +172,14 @@ function HostApp() {
           onStart={handleStartGame}
           onKickPlayer={(nick) => socketRef.current?.emit('host:kick-player', { pin, nickname: nick })}
           socket={socketRef.current}
+        />
+      );
+    case 'countdown':
+      return (
+        <StartCountdown
+          socket={socketRef.current}
+          isHost
+          totalQuestions={activeQuiz?.questions?.length || 1}
         />
       );
     case 'projector':
@@ -263,6 +276,10 @@ function PlayerApp() {
         setJoinError(message);
       });
 
+      socket.on('game:starting', () => {
+        setView('countdown');
+      });
+
       socket.on('game:started', () => {
         // Next event (game:question) will transition view
       });
@@ -328,8 +345,12 @@ function PlayerApp() {
   }, [socketRef]);
 
   const handleReaction = useCallback((emoji) => {
-    socketRef.current?.emit('player:reaction', { pin, emoji });
-  }, [pin, socketRef]);
+    let targetNick = String(nickname || '').trim();
+    try {
+      if (!targetNick) targetNick = sessionStorage.getItem('sqi_nickname') || '';
+    } catch {}
+    socketRef.current?.emit('player:reaction', { pin, emoji, nickname: targetNick });
+  }, [pin, nickname, socketRef]);
 
   const handleAnswer = useCallback((answer, timeLeft) => {
     if (hasAnswered) return;
@@ -359,6 +380,8 @@ function PlayerApp() {
       return <Join onJoin={handleJoin} error={joinError} isJoining={isJoining} />;
     case 'waiting':
       return <Waiting nickname={nickname} avatar={avatar} onReact={handleReaction} />;
+    case 'countdown':
+      return <StartCountdown socket={socketRef.current} isPlayer totalQuestions={1} />;
     case 'controller':
       return (
         <Controller

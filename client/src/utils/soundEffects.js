@@ -99,6 +99,64 @@ export function playTick(urgent = false) {
 }
 
 /**
+ * Game start exaggerated 5-second countdown beep
+ */
+export function playStartCountdownTick(count) {
+  if (isMuted()) return;
+  if (count > 1) {
+    playTone(440, 'triangle', 0.15, 0.16, 0); // A4
+  } else if (count === 1) {
+    playTone(659.25, 'triangle', 0.22, 0.20, 0); // E5
+  } else {
+    // GO!
+    playTone(523.25, 'sine', 0.2, 0.18, 0);
+    playTone(659.25, 'sine', 0.25, 0.2, 0.06);
+    playTone(1046.5, 'sine', 0.45, 0.25, 0.12);
+  }
+}
+
+/**
+ * Score physical count-up rolling tick
+ */
+export function playScoreTick() {
+  if (isMuted()) return;
+  playTone(500 + Math.random() * 250, 'sine', 0.04, 0.05, 0);
+}
+
+/**
+ * Suspenseful Drumroll tension for podium reveal
+ */
+export function playDrumroll(duration = 1.6) {
+  if (isMuted()) return;
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const steps = Math.floor(duration * 20);
+  for (let i = 0; i < steps; i++) {
+    const delay = (i / steps) * duration;
+    const freq = 120 + Math.random() * 60;
+    const gainVal = 0.03 + (i / steps) * 0.07;
+    playTone(freq, 'triangle', 0.035, gainVal, delay);
+  }
+}
+
+/**
+ * Single place spotlight hit on podium
+ */
+export function playPodiumSpotlight(rank) {
+  if (isMuted()) return;
+  if (rank === 3) {
+    playTone(440, 'triangle', 0.35, 0.18, 0);
+    playTone(554.37, 'sine', 0.4, 0.15, 0.08);
+  } else if (rank === 2) {
+    playTone(554.37, 'triangle', 0.35, 0.18, 0);
+    playTone(659.25, 'sine', 0.45, 0.18, 0.08);
+  } else if (rank === 1) {
+    playFanfare();
+  }
+}
+
+/**
  * Question reveal chime (rich major chord)
  */
 export function playReveal() {
@@ -148,6 +206,6 @@ export function playFanfare() {
   ];
 
   notes.forEach((n) => {
-    playTone(n.f, 'triangle', n.d, 0.15, n.delay);
+    playTone(n.f, 'triangle', n.d, 0.18, n.delay);
   });
 }
