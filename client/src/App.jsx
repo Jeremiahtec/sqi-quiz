@@ -298,11 +298,6 @@ function PlayerApp() {
       });
 
       socket.on('game:ended', (data) => {
-        try {
-          sessionStorage.removeItem('sqi_pin');
-          sessionStorage.removeItem('sqi_nickname');
-          sessionStorage.removeItem('sqi_avatar');
-        } catch {}
         setFinalData(data);
         setView('gameover');
       });
@@ -395,7 +390,26 @@ function PlayerApp() {
     case 'result':
       return <PlayerResult resultData={resultData} onReact={handleReaction} />;
     case 'gameover':
-      return <PlayerResult resultData={null} finalData={finalData} nickname={nickname} isGameOver onReact={handleReaction} />;
+      return (
+        <PlayerResult
+          isGameOver
+          finalData={finalData}
+          nickname={nickname || (() => { try { return sessionStorage.getItem('sqi_nickname') || ''; } catch { return ''; } })()}
+          avatar={avatar || (() => { try { return sessionStorage.getItem('sqi_avatar') || '🎓'; } catch { return '🎓'; } })()}
+          onReact={handleReaction}
+          onPlayAgain={() => {
+            try {
+              sessionStorage.removeItem('sqi_pin');
+              sessionStorage.removeItem('sqi_nickname');
+              sessionStorage.removeItem('sqi_avatar');
+            } catch {}
+            setPin('');
+            setNickname('');
+            setFinalData(null);
+            setView('join');
+          }}
+        />
+      );
     default:
       return null;
   }
