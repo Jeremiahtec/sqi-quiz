@@ -554,9 +554,12 @@ export default function QuizCreator({ initialQuiz, onSave, onCancel }) {
             <ArrowLeft size={16} /> Back
           </button>
           <div style={{ width: '1px', height: '24px', background: 'var(--sqi-gray-border)' }} />
-          <h1 className="font-display" style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, color: 'var(--sqi-navy)' }}>
-            {isEditing ? 'Edit Quiz' : 'Create New Quiz'}
-          </h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <img src="/sqi-logo.png" alt="SQI" style={{ width: '30px', height: '30px', objectFit: 'contain' }} />
+            <h1 className="font-display" style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, color: 'var(--sqi-navy)' }}>
+              {isEditing ? 'Edit Quiz' : 'Create New Quiz'}
+            </h1>
+          </div>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

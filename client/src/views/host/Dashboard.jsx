@@ -124,22 +124,16 @@ export default function Dashboard({ onCreateNew, onEdit, onHost }) {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <div
+          <img
+            src="/sqi-logo.png"
+            alt="SQI College of ICT"
             style={{
               width: '42px',
               height: '42px',
-              background: 'linear-gradient(135deg, #2563EB 0%, #1E3A8A 100%)',
-              borderRadius: '12px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '1.3rem',
-              boxShadow: '0 4px 14px rgba(37, 99, 235, 0.35)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 4px 12px rgba(37, 99, 235, 0.4))',
             }}
-          >
-            🎓
-          </div>
+          />
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <h1 className="font-display" style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0, color: '#ffffff', letterSpacing: '-0.01em' }}>

@@ -87,9 +87,9 @@ export default function PostGame({ finalData, onDone, socket }) {
         position: 'relative', zIndex: 20, flexShrink: 0,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '1.4rem' }}>🏆</span>
+          <img src="/sqi-logo.png" alt="SQI College of ICT" style={{ width: '38px', height: '38px', objectFit: 'contain' }} />
           <div>
-            <h1 className="font-display" style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>Game Over!</h1>
+            <h1 className="font-display" style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>Tournament Results</h1>
             <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
               {leaderboard.length} players · {questionStats.length} questions
             </p>

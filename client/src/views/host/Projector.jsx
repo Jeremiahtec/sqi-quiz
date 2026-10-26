@@ -436,8 +436,8 @@ export default function Projector({
           <FullscreenToggle />
           <SoundToggle />
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '4px' }}>
-            <span style={{ fontSize: '1.2rem' }}>🎓</span>
-            <span className="font-display" style={{ fontWeight: 800, fontSize: '0.95rem', color: 'rgba(255,255,255,0.7)' }}>
+            <img src="/sqi-logo.png" alt="SQI" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
+            <span className="font-display" style={{ fontWeight: 800, fontSize: '0.95rem', color: 'rgba(255,255,255,0.85)' }}>
               SQI Quiz
             </span>
           </div>

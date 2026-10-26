@@ -95,24 +95,18 @@ export default function Join({ onJoin, error, isJoining }) {
       >
         {/* SQI Emblem & Branding */}
         <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '64px',
-              height: '64px',
-              borderRadius: '18px',
-              background: 'linear-gradient(135deg, #2563EB, #1D4ED8)',
-              color: 'white',
-              marginBottom: '14px',
-              fontSize: '1.8rem',
-              animation: 'float 3.5s ease-in-out infinite',
-              boxShadow: '0 8px 24px rgba(37, 99, 235, 0.35)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-            }}
-          >
-            🎓
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '14px' }}>
+            <img
+              src="/sqi-logo.png"
+              alt="SQI College of ICT Logo"
+              style={{
+                width: '74px',
+                height: '74px',
+                objectFit: 'contain',
+                animation: 'float 3.5s ease-in-out infinite',
+                filter: 'drop-shadow(0 8px 24px rgba(37, 99, 235, 0.45))',
+              }}
+            />
           </div>
           <h1
             className="font-display"

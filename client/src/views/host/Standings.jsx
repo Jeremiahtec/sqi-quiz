@@ -192,8 +192,8 @@ export default function Standings({ leaderboard = [], questionIndex = 0, totalQu
           <FullscreenToggle />
           <SoundToggle />
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '1.2rem' }}>🎓</span>
-            <span className="font-display" style={{ fontWeight: 800, fontSize: '0.95rem', color: 'rgba(255,255,255,0.8)' }}>
+            <img src="/sqi-logo.png" alt="SQI" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
+            <span className="font-display" style={{ fontWeight: 800, fontSize: '0.95rem', color: 'rgba(255,255,255,0.85)' }}>
               SQI Quiz
             </span>
           </div>

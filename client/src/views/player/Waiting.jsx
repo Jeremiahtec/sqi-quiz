@@ -50,6 +50,14 @@ export default function Waiting({ nickname, avatar, onReact }) {
           width: '100%',
         }}
       >
+        {/* Brand header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '16px' }}>
+          <img src="/sqi-logo.png" alt="SQI" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+          <span className="font-display" style={{ fontWeight: 800, fontSize: '0.95rem', color: 'rgba(255,255,255,0.85)' }}>
+            SQI Quiz Arena
+          </span>
+        </div>
+
         {/* Floating Avatar with glowing aura */}
         <div style={{ position: 'relative', display: 'inline-block', marginBottom: '16px' }}>
           <div

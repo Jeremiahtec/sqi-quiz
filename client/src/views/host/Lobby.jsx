@@ -90,21 +90,16 @@ export default function Lobby({ pin, players = [], quiz, connected, onStart, onK
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div
+          <img
+            src="/sqi-logo.png"
+            alt="SQI College of ICT"
             style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '10px',
-              background: 'linear-gradient(135deg, #2563EB, #1D4ED8)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '1.2rem',
-              boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)',
+              width: '40px',
+              height: '40px',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 4px 12px rgba(37, 99, 235, 0.4))',
             }}
-          >
-            🎓
-          </div>
+          />
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <h1 className="font-display" style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0, color: '#ffffff' }}>
