@@ -1,0 +1,15 @@
+{
+  "name": "sqi-quiz",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SQI Quiz — Real-Time Interactive Classroom Quiz Platform",
+  "scripts": {
+    "build": "npm run build --prefix client",
+    "start": "node server/index.js",
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client"
+  },
+  "keywords": ["quiz", "classroom", "socketio", "react", "kahoot"],
+  "author": "SQI College of ICT",
+  "license": "MIT"
+}

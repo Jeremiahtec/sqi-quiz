@@ -1,0 +1,238 @@
+@import "tailwindcss";
+
+:root {
+  /* SQI Theme Variables */
+  --sqi-navy: #0A1128;
+  --sqi-navy-light: #162244;
+  --sqi-white: #FFFFFF;
+  --sqi-gray-bg: #F4F6F8;
+  --sqi-gray-border: #E2E8F0;
+  --sqi-text-dark: #1E293B;
+  --sqi-text-light: #64748B;
+  
+  /* Brand accents */
+  --sqi-accent: #2563EB; /* Premium Blue */
+  
+  /* Matte Quiz Colors */
+  --opt-red: #E11D48;
+  --opt-blue: #2563EB;
+  --opt-yellow: #D97706;
+  --opt-green: #059669;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--sqi-gray-bg);
+  color: var(--sqi-text-dark);
+}
+
+.font-display {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Premium Buttons
+   ───────────────────────────────────────────────────────────── */
+.btn-primary {
+  background: var(--sqi-navy);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px -1px rgba(10, 17, 40, 0.1), 0 2px 4px -1px rgba(10, 17, 40, 0.06);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--sqi-navy-light);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 8px -1px rgba(10, 17, 40, 0.15), 0 4px 6px -1px rgba(10, 17, 40, 0.1);
+}
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--sqi-text-light);
+  border: 1px solid var(--sqi-gray-border);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.03);
+  color: var(--sqi-text-dark);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Cards & Containers
+   ───────────────────────────────────────────────────────────── */
+.sqi-card {
+  background: var(--sqi-white);
+  border: 1px solid var(--sqi-gray-border);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+}
+
+.sqi-card-dark {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+}
+
+/* Form Inputs */
+.input-base {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--sqi-gray-border);
+  background: var(--sqi-white);
+  color: var(--sqi-text-dark);
+  font-family: inherit;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.input-base:focus {
+  border-color: var(--sqi-accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.input-dark {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.input-dark:focus {
+  border-color: var(--sqi-accent);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Utility Classes & Layouts
+   ───────────────────────────────────────────────────────────── */
+.layout-navy {
+  background-color: var(--sqi-navy);
+  color: white;
+  min-height: 100vh;
+}
+
+.layout-light {
+  background-color: var(--sqi-gray-bg);
+  color: var(--sqi-text-dark);
+  min-height: 100vh;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Tactile Quiz Pads
+   ───────────────────────────────────────────────────────────── */
+.tactile-pad {
+  position: relative;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.12s ease, filter 0.15s ease, opacity 0.25s ease, box-shadow 0.2s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+}
+.tactile-pad:active:not(:disabled) {
+  transform: scale(0.96) translateY(2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+.tactile-pad:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+.tactile-pad:disabled {
+  cursor: default;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Animations (Subtle & Professional)
+   ───────────────────────────────────────────────────────────── */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up {
+  animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-fade-in {
+  animation: fade-in 0.3s ease forwards;
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.animate-scale-in {
+  animation: scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes progress-shrink {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+.animate-shrink {
+  animation: progress-shrink linear forwards;
+}
+
+/* Confetti keyframes */
+@keyframes confetti-fall {
+  0%   { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+
+/* Floating reaction animation */
+@keyframes float-up-fade {
+  0% {
+    transform: translateY(0) scale(0.6) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    transform: translateY(-40px) scale(1.2) rotate(8deg);
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-420px) scale(1.4) rotate(-10deg);
+    opacity: 0;
+  }
+}
+.animate-float-reaction {
+  animation: float-up-fade 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
