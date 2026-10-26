@@ -124,6 +124,17 @@ export function playScoreTick() {
 }
 
 /**
+ * Thrilling overtake sound when a player climbs up in standings
+ */
+export function playOvertake() {
+  if (isMuted()) return;
+  playTone(392.00, 'triangle', 0.20, 0.16, 0);     // G4
+  playTone(523.25, 'triangle', 0.25, 0.18, 0.10);  // C5
+  playTone(659.25, 'sine',     0.35, 0.22, 0.20);  // E5
+  playTone(1046.50, 'sine',    0.55, 0.26, 0.32);  // C6
+}
+
+/**
  * Suspenseful Drumroll tension for podium reveal
  */
 export function playDrumroll(duration = 1.6) {
