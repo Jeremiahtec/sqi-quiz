@@ -165,9 +165,9 @@ export default function Standings({ leaderboard = [], questionIndex = 0, totalQu
 
   return (
     <div className="layout-navy" style={{
-      minHeight: '100vh',
+      minHeight: '100vh', width: '100%', maxWidth: '100%',
       display: 'flex', flexDirection: 'column',
-      position: 'relative', overflow: 'hidden',
+      position: 'relative', overflowX: 'hidden',
     }}>
       {/* Floating reactions overlay */}
       <FloatingReactions socket={socket} />

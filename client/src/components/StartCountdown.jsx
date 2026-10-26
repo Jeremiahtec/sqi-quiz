@@ -62,7 +62,7 @@ export default function StartCountdown({ socket, isHost, totalQuestions = 1 }) {
 
   return (
     <div className="layout-navy" style={{
-      height: '100dvh', width: '100vw',
+      height: '100dvh', width: '100%', maxWidth: '100%',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
       position: 'relative', overflow: 'hidden',

@@ -2,8 +2,11 @@
  * Result.jsx — Player Result & Post-Game Analytics Screen
  * Shows:
  * 1. QuestionResult: Per-question feedback (points, streak, rank, correct answer).
- * 2. GameOver: Full tournament analytics (final rank, total points, accuracy %,
- *    best streak, question-by-question breakdown, top leaderboard, and play again).
+ * 2. GameOver: Full tournament analytics terminal (final rank, total points,
+ *    accuracy %, best streak, question-by-question breakdown, top leaderboard,
+ *    reaction toolbar, and play again button).
+ *
+ * Designed with zero unwanted scrollbars, rich glassmorphism, and responsive bounds.
  */
 import { useState } from 'react';
 import {
@@ -19,6 +22,7 @@ import {
   ChevronUp,
   RotateCcw,
   Sparkles,
+  Medal,
 } from 'lucide-react';
 import ReactionToolbar from '../../components/ReactionToolbar';
 
@@ -39,7 +43,7 @@ function QuestionResult({ resultData, onReact }) {
       className="layout-navy"
       style={{
         minHeight: '100dvh',
-        width: '100vw',
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -47,33 +51,53 @@ function QuestionResult({ resultData, onReact }) {
         padding: '24px 20px',
         textAlign: 'center',
         position: 'relative',
-        overflow: 'hidden',
-        backgroundColor: 'var(--sqi-navy)',
+        overflowX: 'hidden',
+        backgroundColor: '#070D1E',
       }}
     >
       <div
         className="animate-scale-in"
-        style={{ position: 'relative', zIndex: 1, maxWidth: '360px', width: '100%' }}
+        style={{ position: 'relative', zIndex: 1, maxWidth: '380px', width: '100%' }}
       >
-        {/* Big Animated Icon */}
-        <div style={{ marginBottom: '14px', animation: 'scale-in 0.4s cubic-bezier(0.175,0.885,0.32,1.275)' }}>
+        {/* Big Animated Icon with radial glow */}
+        <div style={{ marginBottom: '14px', position: 'relative', display: 'inline-block' }}>
+          <div
+            style={{
+              position: 'absolute',
+              inset: '-20px',
+              borderRadius: '50%',
+              background: correct
+                ? 'radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, transparent 70%)'
+                : 'radial-gradient(circle, rgba(244, 63, 94, 0.3) 0%, transparent 70%)',
+              pointerEvents: 'none',
+            }}
+          />
+
           {correct ? (
-            <div style={{
-              display: 'inline-flex', padding: '16px', borderRadius: '50%',
-              background: 'rgba(16, 185, 129, 0.15)',
-              border: '2px solid rgba(16, 185, 129, 0.4)',
-              boxShadow: '0 0 30px rgba(16, 185, 129, 0.3)',
-            }}>
-              <CheckCircle2 size={72} style={{ color: 'var(--opt-green)' }} />
+            <div
+              style={{
+                display: 'inline-flex',
+                padding: '16px',
+                borderRadius: '50%',
+                background: 'rgba(16, 185, 129, 0.15)',
+                border: '2px solid rgba(16, 185, 129, 0.45)',
+                boxShadow: '0 0 32px rgba(16, 185, 129, 0.35)',
+              }}
+            >
+              <CheckCircle2 size={68} style={{ color: '#34d399' }} />
             </div>
           ) : (
-            <div style={{
-              display: 'inline-flex', padding: '16px', borderRadius: '50%',
-              background: 'rgba(244, 63, 94, 0.15)',
-              border: '2px solid rgba(244, 63, 94, 0.4)',
-              boxShadow: '0 0 30px rgba(244, 63, 94, 0.3)',
-            }}>
-              <XCircle size={72} style={{ color: 'var(--opt-red)' }} />
+            <div
+              style={{
+                display: 'inline-flex',
+                padding: '16px',
+                borderRadius: '50%',
+                background: 'rgba(244, 63, 94, 0.15)',
+                border: '2px solid rgba(244, 63, 94, 0.45)',
+                boxShadow: '0 0 32px rgba(244, 63, 94, 0.35)',
+              }}
+            >
+              <XCircle size={68} style={{ color: '#f43f5e' }} />
             </div>
           )}
         </div>
@@ -98,38 +122,44 @@ function QuestionResult({ resultData, onReact }) {
           >
             <Flame size={15} fill="#fbbf24" color="#fbbf24" />
             <span>{streak} in a row!</span>
-            {streakBonus > 0 && <span style={{ opacity: 0.85 }}>(+{streakBonus} bonus)</span>}
+            {streakBonus > 0 && (
+              <span style={{ opacity: 0.8, fontSize: '0.78rem' }}>(+{streakBonus} streak bonus)</span>
+            )}
           </div>
         )}
 
-        {/* Correct / Incorrect Header */}
-        <h1
+        {/* Title */}
+        <h2
           className="font-display"
           style={{
-            fontSize: '2.4rem',
-            fontWeight: 900,
-            margin: '0 0 6px',
-            color: correct ? 'var(--opt-green)' : 'var(--opt-red)',
-            textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+            fontSize: '2rem',
+            fontWeight: 800,
+            margin: '0 0 4px',
+            color: correct ? '#34d399' : '#f43f5e',
           }}
         >
-          {correct ? 'Correct!' : 'Incorrect!'}
-        </h1>
+          {correct ? 'Brilliant!' : 'Not Quite!'}
+        </h2>
 
-        {/* Show correct answer if wrong */}
+        {/* Correct answer display if missed */}
         {!correct && correctAnswerText && (
-          <div style={{
-            background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.12)',
-            borderRadius: '12px',
-            padding: '10px 16px',
-            margin: '0 auto 16px',
-            maxWidth: '320px',
-          }}>
-            <p style={{ margin: 0, fontSize: '0.82rem', color: 'rgba(255,255,255,0.6)' }}>Correct answer:</p>
-            <p style={{ margin: '2px 0 0', fontSize: '0.95rem', fontWeight: 700, color: '#ffffff' }}>
-              {correctAnswerText}
-            </p>
+          <div
+            style={{
+              margin: '10px auto 16px',
+              padding: '10px 16px',
+              borderRadius: '12px',
+              background: 'rgba(16, 185, 129, 0.12)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
+              color: '#34d399',
+              fontSize: '0.86rem',
+              fontWeight: 600,
+              maxWidth: '320px',
+            }}
+          >
+            <span style={{ opacity: 0.75, display: 'block', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '2px' }}>
+              Correct Answer
+            </span>
+            {correctAnswerText}
           </div>
         )}
 
@@ -138,11 +168,10 @@ function QuestionResult({ resultData, onReact }) {
           className="sqi-card-dark"
           style={{
             padding: '20px 24px',
-            marginBottom: '18px',
-            background: 'rgba(10, 17, 40, 0.85)',
-            border: '1px solid rgba(255, 255, 255, 0.14)',
-            backdropFilter: 'blur(12px)',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+            margin: '16px 0 20px',
+            borderRadius: '18px',
+            background: 'rgba(16, 27, 59, 0.75)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
           }}
         >
           {correct && (
@@ -150,23 +179,25 @@ function QuestionResult({ resultData, onReact }) {
               <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 4px', fontWeight: 700 }}>
                 Points Earned
               </p>
-              <p className="font-display" style={{ fontSize: '2.6rem', fontWeight: 900, color: '#38bdf8', margin: 0 }}>
+              <p className="font-display" style={{ fontSize: '2.5rem', fontWeight: 900, color: '#38bdf8', margin: 0 }}>
                 +{(scoreGain || 0).toLocaleString()}
               </p>
             </div>
           )}
 
-          <div style={{
-            borderTop: correct ? '1px solid rgba(255,255,255,0.1)' : 'none',
-            paddingTop: correct ? '14px' : 0,
-            display: 'flex',
-            justifyContent: 'space-around',
-          }}>
+          <div
+            style={{
+              borderTop: correct ? '1px solid rgba(255,255,255,0.1)' : 'none',
+              paddingTop: correct ? '14px' : 0,
+              display: 'flex',
+              justifyContent: 'space-around',
+            }}
+          >
             <div>
               <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 2px', fontWeight: 700 }}>
                 Total Score
               </p>
-              <p className="font-display" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#ffffff', margin: 0 }}>
+              <p className="font-display" style={{ fontSize: '1.45rem', fontWeight: 800, color: '#ffffff', margin: 0 }}>
                 {(totalScore || 0).toLocaleString()}
               </p>
             </div>
@@ -175,7 +206,7 @@ function QuestionResult({ resultData, onReact }) {
               <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 2px', fontWeight: 700 }}>
                 Current Rank
               </p>
-              <p className="font-display" style={{ fontSize: '1.5rem', fontWeight: 800, color: rank === 1 ? '#fbbf24' : '#ffffff', margin: 0 }}>
+              <p className="font-display" style={{ fontSize: '1.45rem', fontWeight: 800, color: rank === 1 ? '#fbbf24' : '#ffffff', margin: 0 }}>
                 #{rank || '—'}
               </p>
             </div>
@@ -222,7 +253,7 @@ function GameOver({ finalData, nickname, avatar, onReact, onPlayAgain }) {
   const isSecond = myRank === 2;
   const isThird = myRank === 3;
 
-  const medalEmoji = isWinner ? '🥇' : isSecond ? '🥈' : isThird ? '🥉' : '🎖️';
+  const medalIcon = isWinner ? '🥇' : isSecond ? '🥈' : isThird ? '🥉' : '🎖️';
   const rankTitle = isWinner
     ? 'Tournament Champion!'
     : isSecond
@@ -231,103 +262,161 @@ function GameOver({ finalData, nickname, avatar, onReact, onPlayAgain }) {
     ? '3rd Place Finish!'
     : `Rank #${myRank} of ${leaderboard.length}`;
 
-  const rankColor = isWinner ? '#fbbf24' : isSecond ? '#94a3b8' : isThird ? '#cd7f32' : 'var(--sqi-accent)';
+  const rankColor = isWinner ? '#fbbf24' : isSecond ? '#cbd5e1' : isThird ? '#f97316' : '#60a5fa';
+
+  const auraGradient = isWinner
+    ? 'radial-gradient(circle, rgba(251, 191, 36, 0.3) 0%, transparent 70%)'
+    : isSecond
+    ? 'radial-gradient(circle, rgba(148, 163, 184, 0.3) 0%, transparent 70%)'
+    : isThird
+    ? 'radial-gradient(circle, rgba(249, 115, 22, 0.25) 0%, transparent 70%)'
+    : 'radial-gradient(circle, rgba(37, 99, 235, 0.25) 0%, transparent 70%)';
 
   return (
     <div
       className="layout-navy"
       style={{
         minHeight: '100dvh',
-        width: '100vw',
+        width: '100%',
+        maxWidth: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: '32px 20px',
+        padding: '36px 20px 48px',
         textAlign: 'center',
         position: 'relative',
-        overflowY: 'auto',
-        backgroundColor: 'var(--sqi-navy)',
+        overflowX: 'hidden',
+        backgroundColor: '#070D1E',
       }}
     >
       <div
         className="animate-scale-in"
-        style={{ position: 'relative', zIndex: 1, maxWidth: '420px', width: '100%', paddingBottom: '32px' }}
+        style={{
+          width: '100%',
+          maxWidth: '460px',
+          position: 'relative',
+          zIndex: 1,
+        }}
       >
-        {/* Hero Medal Badge */}
-        <div style={{
-          fontSize: '4.5rem',
-          lineHeight: 1,
-          marginBottom: '12px',
-          animation: 'bounce-in 0.6s cubic-bezier(0.175,0.885,0.32,1.275)',
-          filter: isWinner ? 'drop-shadow(0 0 20px rgba(245, 158, 11, 0.6))' : 'none',
-        }}>
-          {medalEmoji}
+        {/* ── Top Hero Banner & Medal ───────────────────────── */}
+        <div style={{ position: 'relative', marginBottom: '20px' }}>
+          {/* Ambient Glow */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '-30px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '180px',
+              height: '180px',
+              background: auraGradient,
+              borderRadius: '50%',
+              pointerEvents: 'none',
+              filter: 'blur(10px)',
+            }}
+          />
+
+          {/* Big Medal */}
+          <div
+            style={{
+              fontSize: '4.2rem',
+              lineHeight: 1,
+              marginBottom: '10px',
+              filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.4))',
+              animation: 'float 3.5s ease-in-out infinite',
+            }}
+          >
+            {medalIcon}
+          </div>
+
+          <h2
+            className="font-display"
+            style={{
+              fontSize: '2.1rem',
+              fontWeight: 900,
+              margin: '0 0 6px',
+              color: rankColor,
+              letterSpacing: '-0.01em',
+            }}
+          >
+            {rankTitle}
+          </h2>
+
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 14px', borderRadius: '999px', background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+            <span style={{ fontSize: '1.2rem' }}>{avatar || myEntry?.avatar || '🎓'}</span>
+            <span style={{ fontSize: '0.95rem', fontWeight: 700, color: '#ffffff' }}>
+              Well played, {myEntry?.nickname || nickname}!
+            </span>
+          </div>
         </div>
 
-        {/* Title & Nickname */}
-        <h1
-          className="font-display"
-          style={{
-            fontSize: '2rem',
-            fontWeight: 900,
-            margin: '0 0 4px',
-            color: rankColor,
-            textShadow: '0 2px 10px rgba(0,0,0,0.5)',
-          }}
-        >
-          {rankTitle}
-        </h1>
-
-        <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1rem', fontWeight: 600, margin: '0 0 22px' }}>
-          Well played, <span style={{ color: '#ffffff', fontWeight: 800 }}>{myEntry?.nickname || nickname}</span>!
-        </p>
-
-        {/* ── Main Performance Score Card ──────────────────── */}
+        {/* ── Final Score & Stats Terminal ─────────────────── */}
         <div
           className="sqi-card-dark"
           style={{
-            padding: '24px 20px',
+            padding: '24px',
             borderRadius: '20px',
-            marginBottom: '20px',
-            background: isWinner
-              ? 'linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(10, 17, 40, 0.95) 100%)'
-              : 'rgba(10, 17, 40, 0.9)',
-            border: isWinner ? '2px solid rgba(245, 158, 11, 0.5)' : '1px solid rgba(255, 255, 255, 0.15)',
-            boxShadow: '0 12px 36px rgba(0,0,0,0.5)',
+            marginBottom: '18px',
+            background: 'linear-gradient(180deg, rgba(16, 27, 59, 0.85) 0%, rgba(10, 17, 40, 0.95) 100%)',
+            border: '1px solid rgba(255, 255, 255, 0.12)',
+            boxShadow: '0 12px 36px rgba(0, 0, 0, 0.35)',
           }}
         >
-          <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 6px', fontWeight: 700 }}>
+          <p
+            style={{
+              fontSize: '0.72rem',
+              fontWeight: 800,
+              textTransform: 'uppercase',
+              letterSpacing: '0.14em',
+              color: 'rgba(255, 255, 255, 0.5)',
+              margin: '0 0 6px',
+            }}
+          >
             Final Total Score
           </p>
-          <p
+
+          <div
             className="font-display"
             style={{
-              fontSize: '3.6rem',
+              fontSize: '3.4rem',
               fontWeight: 900,
-              color: isWinner ? '#fbbf24' : '#38bdf8',
-              margin: '0 0 16px',
-              lineHeight: 1,
+              color: '#38bdf8',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.1,
+              marginBottom: '20px',
+              textShadow: '0 0 24px rgba(56, 189, 248, 0.35)',
             }}
           >
             {finalScore.toLocaleString()}
-            <span style={{ fontSize: '1.1rem', fontWeight: 700, marginLeft: '6px', color: 'rgba(255,255,255,0.4)' }}>pts</span>
-          </p>
+            <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'rgba(255,255,255,0.45)', marginLeft: '6px' }}>
+              pts
+            </span>
+          </div>
 
-          {/* 3 Metric Analytics Grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr',
-            gap: '8px',
-            paddingTop: '16px',
-            borderTop: '1px solid rgba(255,255,255,0.1)',
-          }}>
+          {/* 3-Stat Metric Grid */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '10px',
+              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+              paddingTop: '16px',
+            }}
+          >
             {/* Accuracy */}
-            <div style={{ padding: '8px 4px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'rgba(255,255,255,0.5)', fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase' }}>
-                <Target size={12} />
+            <div
+              style={{
+                padding: '10px 8px',
+                borderRadius: '12px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>
+                <Target size={12} style={{ color: '#34d399' }} />
                 <span>Accuracy</span>
               </div>
-              <p className="font-display" style={{ fontSize: '1.4rem', fontWeight: 800, color: accuracy >= 70 ? 'var(--opt-green)' : accuracy >= 40 ? 'var(--opt-yellow)' : 'var(--opt-red)', margin: '4px 0 0' }}>
+              <p className="font-display" style={{ fontSize: '1.35rem', fontWeight: 800, margin: 0, color: '#34d399' }}>
                 {accuracy}%
               </p>
               <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)' }}>
@@ -336,67 +425,106 @@ function GameOver({ finalData, nickname, avatar, onReact, onPlayAgain }) {
             </div>
 
             {/* Streak */}
-            <div style={{ padding: '8px 4px', borderLeft: '1px solid rgba(255,255,255,0.1)', borderRight: '1px solid rgba(255,255,255,0.1)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'rgba(255,255,255,0.5)', fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase' }}>
-                <Flame size={12} />
-                <span>Best Streak</span>
+            <div
+              style={{
+                padding: '10px 8px',
+                borderRadius: '12px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>
+                <Flame size={12} style={{ color: '#fbbf24' }} />
+                <span>Streak</span>
               </div>
-              <p className="font-display" style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f59e0b', margin: '4px 0 0' }}>
-                {maxStreak}🔥
+              <p className="font-display" style={{ fontSize: '1.35rem', fontWeight: 800, margin: 0, color: '#fbbf24' }}>
+                {maxStreak}
               </p>
-              <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)' }}>in a row</span>
+              <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)' }}>
+                in a row
+              </span>
             </div>
 
-            {/* Final Position */}
-            <div style={{ padding: '8px 4px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'rgba(255,255,255,0.5)', fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase' }}>
-                <Award size={12} />
+            {/* Place */}
+            <div
+              style={{
+                padding: '10px 8px',
+                borderRadius: '12px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>
+                <Award size={12} style={{ color: '#60a5fa' }} />
                 <span>Place</span>
               </div>
-              <p className="font-display" style={{ fontSize: '1.4rem', fontWeight: 800, color: rankColor, margin: '4px 0 0' }}>
+              <p className="font-display" style={{ fontSize: '1.35rem', fontWeight: 800, margin: 0, color: rankColor }}>
                 #{myRank}
               </p>
-              <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)' }}>of {leaderboard.length}</span>
+              <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)' }}>
+                of {leaderboard.length}
+              </span>
             </div>
           </div>
         </div>
 
-        {/* ── Question-by-Question Performance Breakdown ───── */}
+        {/* ── Question Performance Accordion ───────────────── */}
         {questionStats.length > 0 && (
           <div
             className="sqi-card-dark"
             style={{
-              padding: '16px 20px',
               borderRadius: '16px',
-              marginBottom: '20px',
-              textAlign: 'left',
-              background: 'rgba(10, 17, 40, 0.75)',
+              marginBottom: '18px',
+              overflow: 'hidden',
+              background: 'rgba(16, 27, 59, 0.65)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
             }}
           >
-            <div
+            <button
+              type="button"
               onClick={() => setShowQuestionReview(!showQuestionReview)}
               style={{
+                width: '100%',
+                padding: '14px 18px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                background: 'none',
+                border: 'none',
+                color: '#ffffff',
                 cursor: 'pointer',
-                userSelect: 'none',
+                textAlign: 'left',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Sparkles size={16} style={{ color: 'var(--sqi-accent)' }} />
-                <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#ffffff' }}>
+                <Sparkles size={15} style={{ color: '#60a5fa' }} />
+                <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>
                   Question Performance ({correctCount}/{totalQuestions})
                 </span>
               </div>
-              {showQuestionReview ? <ChevronUp size={18} style={{ color: 'rgba(255,255,255,0.5)' }} /> : <ChevronDown size={18} style={{ color: 'rgba(255,255,255,0.5)' }} />}
-            </div>
+              {showQuestionReview ? (
+                <ChevronUp size={16} style={{ color: 'rgba(255,255,255,0.5)' }} />
+              ) : (
+                <ChevronDown size={16} style={{ color: 'rgba(255,255,255,0.5)' }} />
+              )}
+            </button>
 
             {showQuestionReview && (
-              <div className="animate-slide-up" style={{ marginTop: '14px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div
+                className="animate-slide-up"
+                style={{
+                  borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                  padding: '12px 16px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
+                  maxHeight: '260px',
+                  overflowY: 'auto',
+                }}
+              >
                 {questionStats.map((q, idx) => {
                   const ans = myAnswers[idx];
-                  const isCorrect = ans?.correct;
+                  const isCorrect = ans?.correct === true;
                   const pts = ans?.scoreGain || 0;
 
                   return (
@@ -405,43 +533,41 @@ function GameOver({ finalData, nickname, avatar, onReact, onPlayAgain }) {
                       style={{
                         padding: '10px 12px',
                         borderRadius: '10px',
-                        background: 'rgba(255, 255, 255, 0.04)',
-                        border: isCorrect ? '1px solid rgba(16, 185, 129, 0.25)' : '1px solid rgba(244, 63, 94, 0.25)',
+                        background: isCorrect ? 'rgba(16, 185, 129, 0.08)' : 'rgba(244, 63, 94, 0.08)',
+                        border: `1px solid ${isCorrect ? 'rgba(16, 185, 129, 0.25)' : 'rgba(244, 63, 94, 0.25)'}`,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        gap: '12px',
+                        gap: '10px',
+                        textAlign: 'left',
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: 0 }}>
-                        <span style={{
-                          width: '24px', height: '24px', borderRadius: '50%',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          background: isCorrect ? 'rgba(16, 185, 129, 0.2)' : 'rgba(244, 63, 94, 0.2)',
-                          color: isCorrect ? 'var(--opt-green)' : 'var(--opt-red)',
-                          fontWeight: 800, fontSize: '0.75rem',
-                          flexShrink: 0,
-                        }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+                        <span style={{ fontSize: '1rem', flexShrink: 0 }}>
                           {isCorrect ? '✓' : '✗'}
                         </span>
                         <div style={{ minWidth: 0 }}>
                           <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            Q{idx + 1}: {q.questionText}
+                            <span style={{ color: 'rgba(255,255,255,0.45)', marginRight: '6px' }}>Q{idx + 1}</span>
+                            {q.questionText}
                           </p>
                           {!isCorrect && q.correctAnswer && (
-                            <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: 'var(--opt-green)', fontWeight: 600 }}>
+                            <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: '#34d399', fontWeight: 600 }}>
                               Answer: {q.correctAnswer}
                             </p>
                           )}
                         </div>
                       </div>
 
-                      <span style={{
-                        fontSize: '0.85rem', fontWeight: 800,
-                        color: isCorrect ? '#38bdf8' : 'rgba(255,255,255,0.3)',
-                        fontFamily: "'Outfit', sans-serif",
-                        flexShrink: 0,
-                      }}>
+                      <span
+                        style={{
+                          fontSize: '0.85rem',
+                          fontWeight: 800,
+                          color: isCorrect ? '#38bdf8' : 'rgba(255, 255, 255, 0.3)',
+                          fontFamily: "'Outfit', sans-serif",
+                          flexShrink: 0,
+                        }}
+                      >
                         +{pts}
                       </span>
                     </div>
@@ -459,12 +585,22 @@ function GameOver({ finalData, nickname, avatar, onReact, onPlayAgain }) {
             style={{
               padding: '18px 20px',
               borderRadius: '16px',
-              marginBottom: '24px',
+              marginBottom: '20px',
               textAlign: 'left',
-              background: 'rgba(10, 17, 40, 0.75)',
+              background: 'rgba(16, 27, 59, 0.7)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
             }}
           >
-            <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 12px' }}>
+            <p
+              style={{
+                fontSize: '0.72rem',
+                fontWeight: 800,
+                color: 'rgba(255, 255, 255, 0.45)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                margin: '0 0 12px',
+              }}
+            >
               Final Tournament Leaderboard
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -481,8 +617,8 @@ function GameOver({ finalData, nickname, avatar, onReact, onPlayAgain }) {
                       justifyContent: 'space-between',
                       padding: '8px 12px',
                       borderRadius: '10px',
-                      background: isMe ? 'rgba(37, 99, 235, 0.2)' : 'rgba(255, 255, 255, 0.03)',
-                      border: isMe ? '1px solid rgba(37, 99, 235, 0.45)' : '1px solid transparent',
+                      background: isMe ? 'rgba(37, 99, 235, 0.22)' : 'rgba(255, 255, 255, 0.03)',
+                      border: isMe ? '1px solid rgba(37, 99, 235, 0.5)' : '1px solid transparent',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -490,21 +626,26 @@ function GameOver({ finalData, nickname, avatar, onReact, onPlayAgain }) {
                         {medal}
                       </span>
                       <span style={{ fontSize: '1.2rem' }}>{p.avatar || '🎓'}</span>
-                      <span style={{
-                        fontSize: '0.9rem',
-                        fontWeight: isMe ? 800 : 600,
-                        color: isMe ? '#60a5fa' : '#ffffff',
-                      }}>
-                        {p.nickname} {isMe && '(You)'}
+                      <span
+                        style={{
+                          fontSize: '0.9rem',
+                          fontWeight: isMe ? 800 : 600,
+                          color: isMe ? '#60a5fa' : '#ffffff',
+                          fontFamily: "'Outfit', sans-serif",
+                        }}
+                      >
+                        {p.nickname} {isMe && <span style={{ fontSize: '0.74rem', opacity: 0.8 }}>(You)</span>}
                       </span>
                     </div>
 
-                    <span style={{
-                      fontFamily: "'Outfit', sans-serif",
-                      fontWeight: 800,
-                      fontSize: '0.95rem',
-                      color: i === 0 ? '#fbbf24' : '#ffffff',
-                    }}>
+                    <span
+                      style={{
+                        fontFamily: "'Outfit', sans-serif",
+                        fontWeight: 800,
+                        fontSize: '0.92rem',
+                        color: i === 0 ? '#fbbf24' : '#ffffff',
+                      }}
+                    >
                       {p.score.toLocaleString()} pts
                     </span>
                   </div>
@@ -514,12 +655,12 @@ function GameOver({ finalData, nickname, avatar, onReact, onPlayAgain }) {
           </div>
         )}
 
-        {/* Reaction Dock */}
-        <div style={{ marginBottom: '20px' }}>
+        {/* ── Reaction Dock ───────────────────────────────── */}
+        <div style={{ marginBottom: '18px' }}>
           <ReactionToolbar onReact={onReact} />
         </div>
 
-        {/* Play Again Button */}
+        {/* ── Play Again Button ────────────────────────────── */}
         {onPlayAgain && (
           <button
             onClick={onPlayAgain}
@@ -529,13 +670,9 @@ function GameOver({ finalData, nickname, avatar, onReact, onPlayAgain }) {
               padding: '14px',
               fontSize: '1rem',
               fontWeight: 800,
-              borderRadius: '12px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              borderRadius: '14px',
               gap: '8px',
-              background: 'var(--sqi-accent)',
-              boxShadow: '0 4px 18px rgba(37, 99, 235, 0.35)',
+              boxShadow: '0 4px 20px rgba(37, 99, 235, 0.45)',
             }}
           >
             <RotateCcw size={18} />

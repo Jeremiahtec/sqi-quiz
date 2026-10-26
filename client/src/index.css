@@ -4,6 +4,7 @@
   /* SQI Theme Variables */
   --sqi-navy: #0A1128;
   --sqi-navy-light: #162244;
+  --sqi-navy-card: #101B3B;
   --sqi-white: #FFFFFF;
   --sqi-gray-bg: #F4F6F8;
   --sqi-gray-border: #E2E8F0;
@@ -11,7 +12,11 @@
   --sqi-text-light: #64748B;
   
   /* Brand accents */
-  --sqi-accent: #2563EB; /* Premium Blue */
+  --sqi-accent: #2563EB; /* Premium Electric Blue */
+  --sqi-accent-hover: #1D4ED8;
+  --sqi-purple: #7C3AED;
+  --sqi-cyan: #06B6D4;
+  --sqi-gold: #FBBF24;
   
   /* Matte Quiz Colors */
   --opt-red: #E11D48;
@@ -20,13 +25,52 @@
   --opt-green: #059669;
 }
 
-body {
+/* ─────────────────────────────────────────────────────────────
+   Global Reset & Scrollbars Kill
+   ───────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
   margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  background-color: var(--sqi-navy);
+  color: #ffffff;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--sqi-gray-bg);
-  color: var(--sqi-text-dark);
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sleek modern translucent scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
 }
 
 .font-display {
@@ -37,66 +81,119 @@ body {
    Premium Buttons
    ───────────────────────────────────────────────────────────── */
 .btn-primary {
-  background: var(--sqi-navy);
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 500;
+  padding: 11px 22px;
+  border-radius: 12px;
+  font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 6px -1px rgba(10, 17, 40, 0.1), 0 2px 4px -1px rgba(10, 17, 40, 0.06);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  user-select: none;
 }
 .btn-primary:hover:not(:disabled) {
-  background: var(--sqi-navy-light);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 8px -1px rgba(10, 17, 40, 0.15), 0 4px 6px -1px rgba(10, 17, 40, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 rgba(37, 99, 235, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  filter: brightness(1.06);
+}
+.btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px 0 rgba(37, 99, 235, 0.3);
 }
 .btn-primary:disabled {
-  opacity: 0.6;
+  opacity: 0.45;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 .btn-ghost {
-  background: transparent;
-  color: var(--sqi-text-light);
-  border: 1px solid var(--sqi-gray-border);
-  padding: 10px 20px;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px 18px;
+  border-radius: 10px;
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  user-select: none;
 }
 .btn-ghost:hover:not(:disabled) {
-  background: rgba(0, 0, 0, 0.03);
-  color: var(--sqi-text-dark);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+.btn-ghost:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-gradient-purple {
+  background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%);
+  color: white;
+  box-shadow: 0 4px 14px 0 rgba(124, 58, 237, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.btn-gradient-purple:hover:not(:disabled) {
+  box-shadow: 0 6px 20px 0 rgba(124, 58, 237, 0.45);
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Cards & Containers
+   Cards & Glass Containers
    ───────────────────────────────────────────────────────────── */
 .sqi-card {
   background: var(--sqi-white);
   border: 1px solid var(--sqi-gray-border);
-  border-radius: 12px;
+  border-radius: 16px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
 }
 
 .sqi-card-dark {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  backdrop-filter: blur(12px);
+  background: rgba(16, 27, 59, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.sqi-card-dark:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.sqi-glow-border {
+  position: relative;
+}
+.sqi-glow-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.4), rgba(124, 58, 237, 0.2), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 /* Form Inputs */
 .input-base {
   width: 100%;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid var(--sqi-gray-border);
   background: var(--sqi-white);
   color: var(--sqi-text-dark);
@@ -112,9 +209,9 @@ body {
 .input-dark {
   width: 100%;
   padding: 12px 16px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.3);
   color: white;
   font-family: inherit;
   transition: all 0.2s ease;
@@ -122,32 +219,40 @@ body {
 }
 .input-dark:focus {
   border-color: var(--sqi-accent);
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.45);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Utility Classes & Layouts
+   Utility Layouts & Theme Backdrops
    ───────────────────────────────────────────────────────────── */
 .layout-navy {
-  background-color: var(--sqi-navy);
-  color: white;
+  background-color: #070D1E;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(37, 99, 235, 0.18), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 85% 100%, rgba(124, 58, 237, 0.12), transparent 70%);
+  color: #ffffff;
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .layout-light {
   background-color: var(--sqi-gray-bg);
   color: var(--sqi-text-dark);
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .glass {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Tactile Quiz Pads
+   Tactile Quiz Pads (Mobile Controller)
    ───────────────────────────────────────────────────────────── */
 .tactile-pad {
   position: relative;
@@ -161,24 +266,24 @@ body {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   transition: transform 0.12s ease, filter 0.15s ease, opacity 0.25s ease, box-shadow 0.2s ease;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.35);
 }
 .tactile-pad:active:not(:disabled) {
   transform: scale(0.96) translateY(2px);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.2);
 }
 .tactile-pad:hover:not(:disabled) {
-  filter: brightness(1.06);
+  filter: brightness(1.08);
 }
 .tactile-pad:disabled {
   cursor: default;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Animations (Subtle & Professional)
+   Animations
    ───────────────────────────────────────────────────────────── */
 @keyframes slide-up {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .animate-slide-up {
@@ -194,11 +299,11 @@ body {
 }
 
 @keyframes scale-in {
-  from { opacity: 0; transform: scale(0.97); }
+  from { opacity: 0; transform: scale(0.96); }
   to   { opacity: 1; transform: scale(1); }
 }
 .animate-scale-in {
-  animation: scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: scale-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes progress-shrink {
@@ -207,6 +312,35 @@ body {
 }
 .animate-shrink {
   animation: progress-shrink linear forwards;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer-text {
+  background: linear-gradient(90deg, #fff 0%, #93c5fd 50%, #fff 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
 }
 
 /* Confetti keyframes */

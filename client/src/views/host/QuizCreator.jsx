@@ -505,7 +505,7 @@ export default function QuizCreator({ initialQuiz, onSave, onCancel }) {
   };
 
   return (
-    <div className="layout-light" style={{ display: 'flex', flexDirection: 'column' }}>
+    <div className="layout-light" style={{ minHeight: '100vh', width: '100%', maxWidth: '100%', display: 'flex', flexDirection: 'column', overflowX: 'hidden' }}>
       {/* ── Sticky header ──────────────────────────────── */}
       <header style={{
         padding: '16px 40px',

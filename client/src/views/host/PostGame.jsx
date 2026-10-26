@@ -64,10 +64,13 @@ export default function PostGame({ finalData, onDone, socket }) {
 
   return (
     <div className="layout-navy" style={{
+      minHeight: '100vh',
+      width: '100%',
+      maxWidth: '100%',
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
-      overflow: 'hidden',
+      overflowX: 'hidden',
     }}>
       {/* Floating reactions */}
       <FloatingReactions socket={socket} />

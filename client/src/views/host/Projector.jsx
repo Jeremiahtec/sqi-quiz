@@ -156,7 +156,7 @@ export default function Projector({
 
   return (
     <div className="layout-navy" style={{
-      height: '100vh', width: '100vw',
+      height: '100vh', width: '100%', maxWidth: '100%',
       display: 'flex', flexDirection: 'column',
       overflow: 'hidden',
       position: 'relative',

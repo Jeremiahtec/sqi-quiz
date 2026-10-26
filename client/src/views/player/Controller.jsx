@@ -135,7 +135,7 @@ export default function Controller({ questionData, hasAnswered, selectedAnswer, 
 
   return (
     <div className="layout-navy" style={{
-      height: '100dvh', width: '100vw',
+      height: '100dvh', width: '100%', maxWidth: '100%',
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
