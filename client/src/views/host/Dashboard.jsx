@@ -6,7 +6,7 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   Plus, Play, Pencil, Trash2, HelpCircle, Upload, Download, Copy,
-  Check, Search, Sparkles, Layers, BookOpen, Clock, Activity, ArrowRight
+  Check, Search, Sparkles, Layers, BookOpen, Clock, ArrowRight
 } from 'lucide-react';
 import { loadQuizzes, saveQuiz, deleteQuizById } from '../../utils/quizStorage';
 
@@ -308,25 +308,6 @@ export default function Dashboard({ onCreateNew, onEdit, onHost }) {
                 </div>
                 <span className="font-display" style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ffffff' }}>
                   {totalQuestions}
-                </span>
-              </div>
-
-              <div
-                style={{
-                  padding: '14px 20px',
-                  borderRadius: '14px',
-                  background: 'rgba(255, 255, 255, 0.04)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  minWidth: '120px',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '7px', color: 'rgba(255,255,255,0.5)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', marginBottom: '4px' }}>
-                  <Activity size={13} style={{ color: '#34d399' }} />
-                  <span>Status</span>
-                </div>
-                <span style={{ fontSize: '0.95rem', fontWeight: 700, color: '#34d399', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '6px' }}>
-                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#34d399', boxShadow: '0 0 10px #34d399' }} />
-                  Live Ready
                 </span>
               </div>
             </div>
