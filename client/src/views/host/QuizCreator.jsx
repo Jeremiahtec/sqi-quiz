@@ -411,8 +411,37 @@ function QuestionCard({ question, index, total, onChange, onDelete, onMove }) {
             </div>
           )}
 
-          {/* Time limit */}
-          <TimeSlider value={question.timeLimit} onChange={(v) => update('timeLimit', v)} />
+          {/* Time limit & Double Points row */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+            <div style={{ flex: 1, minWidth: '220px' }}>
+              <TimeSlider value={question.timeLimit} onChange={(v) => update('timeLimit', v)} />
+            </div>
+
+            <label
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 14px',
+                borderRadius: '8px',
+                background: question.doublePoints ? 'rgba(245, 158, 11, 0.12)' : 'var(--sqi-gray-bg)',
+                border: `1px solid ${question.doublePoints ? 'rgba(245, 158, 11, 0.4)' : 'var(--sqi-gray-border)'}`,
+                cursor: 'pointer',
+                userSelect: 'none',
+                marginTop: '12px',
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={Boolean(question.doublePoints)}
+                onChange={(e) => update('doublePoints', e.target.checked)}
+                style={{ cursor: 'pointer' }}
+              />
+              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: question.doublePoints ? '#d97706' : 'var(--sqi-text-dark)' }}>
+                🔥 2X Double Points
+              </span>
+            </label>
+          </div>
         </div>
       )}
     </div>
@@ -496,6 +525,7 @@ export default function QuizCreator({ initialQuiz, onSave, onCancel }) {
         question: q.question.trim(),
         options: q.type === 'open-ended' ? [] : q.options.map((o) => o?.trim() || ''),
         correctAnswer: q.type === 'open-ended' ? q.correctAnswer.trim() : q.correctAnswer,
+        doublePoints: Boolean(q.doublePoints),
       })),
     };
 

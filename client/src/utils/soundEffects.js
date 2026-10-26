@@ -205,6 +205,25 @@ export function playLockIn() {
 }
 
 /**
+ * Question intro subtle suspense tone (Kahoot-style question announcement)
+ */
+export function playQuestionIntro() {
+  if (isMuted()) return;
+  playTone(329.63, 'sine', 0.25, 0.12, 0);       // E4
+  playTone(493.88, 'sine', 0.40, 0.14, 0.12);    // B4
+}
+
+/**
+ * Options pop in sound when question options reveal
+ */
+export function playOptionsPop() {
+  if (isMuted()) return;
+  playTone(523.25, 'triangle', 0.12, 0.14, 0);     // C5
+  playTone(659.25, 'triangle', 0.15, 0.16, 0.05);  // E5
+  playTone(783.99, 'sine',     0.22, 0.18, 0.10);  // G5
+}
+
+/**
  * Podium Victory Fanfare
  */
 export function playFanfare() {

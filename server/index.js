@@ -210,15 +210,21 @@ io.on('connection', (socket) => {
 
     const question = room.quiz.questions[questionIndex];
     const optionCount = _getOptionCount(question);
+    const isDoublePoints = Boolean(question.doublePoints || question.pointsMultiplier === 2);
+    const isLast = (questionIndex + 1) === room.quiz.questions.length;
 
     socket.to(pin).emit('game:question', {
       index: questionIndex,
       type: question.type,
       timeLimit: question.timeLimit,
       optionCount,
+      question: question.question,
+      doublePoints: isDoublePoints,
+      isLastQuestion: isLast,
+      totalQuestions: room.quiz.questions.length,
     });
 
-    socket.emit('game:question-host', _buildHostQuestion(question, questionIndex));
+    socket.emit('game:question-host', _buildHostQuestion(question, questionIndex, room.quiz.questions.length));
 
     // Send initial 0-answer count with active connected total
     const activeTotal = _getActiveConnectedPlayers(room).length;
@@ -438,16 +444,23 @@ function _launchQuestionZero(pin, room) {
   const optionCount = _getOptionCount(question);
 
   // Broadcast "started" + first question to players
+  const isFirstDouble = Boolean(question.doublePoints || question.pointsMultiplier === 2);
+  const isFirstLast = 1 === room.quiz.questions.length;
+
   io.to(pin).emit('game:started', {});
   io.to(pin).emit('game:question', {
     index: 0,
     type: question.type,
     timeLimit: question.timeLimit,
     optionCount,
+    question: question.question,
+    doublePoints: isFirstDouble,
+    isLastQuestion: isFirstLast,
+    totalQuestions: room.quiz.questions.length,
   });
 
   // Send full question to host
-  io.to(room.hostSocketId).emit('game:question-host', _buildHostQuestion(question, 0));
+  io.to(room.hostSocketId).emit('game:question-host', _buildHostQuestion(question, 0, room.quiz.questions.length));
 
   const activeTotal = _getActiveConnectedPlayers(room).length;
   io.to(room.hostSocketId).emit('host:answer-count', { count: 0, total: activeTotal });
@@ -496,7 +509,9 @@ function _getOptionCount(question) {
   return 0; // open-ended
 }
 
-function _buildHostQuestion(question, index) {
+function _buildHostQuestion(question, index, totalQuestions = 0) {
+  const isDoublePoints = Boolean(question.doublePoints || question.pointsMultiplier === 2);
+  const isLast = totalQuestions > 0 ? (index + 1) === totalQuestions : false;
   return {
     index,
     question: question.question,
@@ -511,6 +526,8 @@ function _buildHostQuestion(question, index) {
     codeLanguage: question.codeLanguage || 'javascript',
     imageUrl: question.imageUrl || null,
     explanation: question.explanation || null,
+    doublePoints: isDoublePoints,
+    isLastQuestion: isLast,
   };
 }
 

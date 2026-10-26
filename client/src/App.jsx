@@ -131,8 +131,13 @@ function HostApp() {
   }, [emit, pin]);
 
   const handleShowStandings = useCallback(() => {
-    emit('host:show-standings', { pin });
-  }, [emit, pin]);
+    const isLast = activeQuiz && (questionIndex + 1 >= activeQuiz.questions.length);
+    if (isLast) {
+      emit('host:end-game', { pin });
+    } else {
+      emit('host:show-standings', { pin });
+    }
+  }, [emit, pin, activeQuiz, questionIndex]);
 
   const handleNextQuestion = useCallback(() => {
     const nextIdx = questionIndex + 1;

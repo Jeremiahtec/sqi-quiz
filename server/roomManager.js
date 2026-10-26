@@ -168,10 +168,11 @@ function revealAndScore(room) {
     let streakBonus = 0;
     if (isCorrect) {
       playerData.streak = (playerData.streak || 0) + 1;
+      const mult = (question.doublePoints || question.pointsMultiplier === 2) ? 2 : 1;
       // Score: 1000 pts max, scaled by time remaining. Min 100 pts.
-      const baseScore = Math.max(100, Math.round(1000 * (timeLeft / timeLimit)));
+      const baseScore = Math.max(100, Math.round(1000 * (timeLeft / timeLimit))) * mult;
       // Streak bonus: +50 pts per step beyond 1 (capped at +250)
-      streakBonus = Math.min(250, Math.max(0, (playerData.streak - 1) * 50));
+      streakBonus = Math.min(250, Math.max(0, (playerData.streak - 1) * 50)) * mult;
       scoreGain = baseScore + streakBonus;
       playerData.score += scoreGain;
     } else {
